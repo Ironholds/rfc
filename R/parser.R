@@ -26,6 +26,9 @@ meta_parser <- function(meta_nodes){
   names(formatted_nodes) <- meta_nodes[seq(1,length(meta_nodes),2)]
   
   output$identifier <- unname(formatted_nodes["DC.Identifier"])
+  if(is.na(output$identifier)){
+    stop("This RfC is invalid, or was never issued.")
+  }
   output$authors <- unname(formatted_nodes[names(formatted_nodes) == "DC.Creator"])
   output$title <- unname(formatted_nodes["DC.Title"])
   output$date <- date_formatter(unname(formatted_nodes["DC.Date.Issued"]))
