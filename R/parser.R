@@ -69,13 +69,15 @@ content_parser <- function(title_nodes){
     output$status <- "Proposed standard"
   }
   
-  if(grepl(x = title_nodes[3], pattern = "Obsoleted by")){
-    output$obsoleted_by <- split_and_num(gsub(x = title_nodes[3],pattern = "(Obsoleted by:| |HISTORIC|EXPERIMENTAL)", 
+  obs <- title_nodes[grepl(x = title_nodes, pattern = "Obsoleted by")]
+  if(length(obs) > 0){
+    output$obsoleted_by <- split_and_num(gsub(x = obs[1],pattern = "(Obsoleted by:| |HISTORIC|EXPERIMENTAL)", 
                                               replacement = ""))
   }
   
-  if(grepl(x = title_nodes[4], pattern = "Updated by")){
-    output$updated_by <- split_and_num(gsub(x = title_nodes[4], pattern = "(Updated by: | )", replacement = ""))
+  ups <- title_nodes[grepl(x = title_nodes, pattern = "Updated by")]
+  if(length(ups) > 0){
+    output$updated_by <- split_and_num(gsub(x = ups[1], pattern = "(Updated by: | )", replacement = ""))
   }
   return(output)
   
