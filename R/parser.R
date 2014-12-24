@@ -40,8 +40,9 @@ meta_parser <- function(meta_nodes){
 link_parser <- function(link_nodes, id){
   
   output <- list()
-  rfc_links <- unique(find_and_strip(link_nodes,"(^\\./rfc|#.*)"))
-  rfc_links <- as.numeric(rfc_links[!rfc_links == as.character(id) & !rfc_links == ""])
+  rfc_links <- unique(find_and_strip(link_nodes,"^\\./rfc"))
+  rfc_links <- as.numeric(gsub(x = rfc_links, pattern = "#.*", replacement = ""))
+  rfc_links <- rfc_links[!rfc_links == id & !rfc_links == ""]
   
   output$links <- rfc_links
   return(output)
@@ -71,13 +72,13 @@ content_parser <- function(title_nodes){
   
   obs <- title_nodes[grepl(x = title_nodes, pattern = "Obsoleted by")]
   if(length(obs) > 0){
-    output$obsoleted_by <- split_and_num(gsub(x = obs[1],pattern = "(Obsoleted by:| |HISTORIC|EXPERIMENTAL)", 
+    output$obsoleted_by <- split_and_num(gsub(x = obs[1],pattern = "[a-zA-Z :;]", 
                                               replacement = ""))
   }
   
   ups <- title_nodes[grepl(x = title_nodes, pattern = "Updated by")]
   if(length(ups) > 0){
-    output$updated_by <- split_and_num(gsub(x = ups[1], pattern = "(Updated by: | )", replacement = ""))
+    output$updated_by <- split_and_num(gsub(x = ups[1], pattern = "[a-zA-Z :;]", replacement = ""))
   }
   return(output)
   
