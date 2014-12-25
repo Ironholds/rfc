@@ -10,3 +10,14 @@ split_and_num <- function(x){
 date_formatter <- function(x){
   return(strptime(paste("01",x),"%d %B, %Y", tz = "UTC"))
 }
+
+name_formatter <- function(x){
+  x <- gsub(x = x, pattern = "<.*>", replacement = "")
+  if(!grepl(x = x, pattern = ",", fixed = TRUE)){
+    return(x)
+  } else {
+    x <- unlist(strsplit(x,","))
+    x <- paste(gsub(x = x[2], pattern = " ", replacement = ""), x[1], collapse = "")
+    return(x)
+  }
+}
